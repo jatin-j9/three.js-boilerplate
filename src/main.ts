@@ -286,12 +286,77 @@
 
 /* ANIMATION LOOP */
 
+// import './style.css';
+// import * as THREE from 'three';
+// import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+// import Stats from 'three/addons/libs/stats.module.js';
+
+// const scene = new THREE.Scene();
+
+// const camera = new THREE.PerspectiveCamera(
+//   75,
+//   window.innerWidth / window.innerHeight,
+//   0.1,
+//   1000,
+// );
+// camera.position.z = 1.5;
+
+// const renderer = new THREE.WebGLRenderer({ antialias: true });
+// renderer.setSize(window.innerWidth, window.innerHeight);
+// document.body.appendChild(renderer.domElement);
+
+// window.addEventListener('resize', () => {
+//   camera.aspect = window.innerWidth / window.innerHeight;
+//   camera.updateProjectionMatrix();
+//   renderer.setSize(window.innerWidth, window.innerHeight);
+//   renderer.render(scene, camera); // on-demand re-rendering
+// });
+
+// const controls = new OrbitControls(camera, renderer.domElement);
+// controls.addEventListener('change', function () {
+//   // on demand re-rendering (rendered once initially)
+//   renderer.render(scene, camera);
+// });
+
+// const geometry = new THREE.BoxGeometry();
+// const material = new THREE.MeshNormalMaterial({ wireframe: true });
+
+// const cube = new THREE.Mesh(geometry, material);
+// scene.add(cube);
+
+// const stats = new Stats();
+// document.body.appendChild(stats.dom);
+
+// // const clock = new THREE.Clock();
+// // let delta; // using delta to make animations monitor frame-rate independent
+
+// function animate() {
+//   requestAnimationFrame(animate); // queues the function for another call
+
+//   //   delta = clock.getDelta();
+
+//   //   cube.rotation.x += delta;
+//   //   cube.rotation.y += delta;
+
+//   //   renderer.render(scene, camera); // changes made being re-rendered
+
+//   stats.update();
+// }
+
+// animate();
+
+// renderer.render(scene, camera);
+
+/* OBJECT3D */
+
 import './style.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import Stats from 'three/addons/libs/stats.module.js';
+import { GUI } from 'dat.gui';
 
 const scene = new THREE.Scene();
+scene.add(new THREE.AxesHelper(5)); // axis lines
 
 const camera = new THREE.PerspectiveCamera(
   75,
@@ -299,7 +364,7 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   1000,
 );
-camera.position.z = 1.5;
+camera.position.set(1, 2, 3);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.setSize(window.innerWidth, window.innerHeight);
@@ -309,40 +374,50 @@ window.addEventListener('resize', () => {
   camera.aspect = window.innerWidth / window.innerHeight;
   camera.updateProjectionMatrix();
   renderer.setSize(window.innerWidth, window.innerHeight);
-  renderer.render(scene, camera); // on-demand re-rendering
 });
 
-const controls = new OrbitControls(camera, renderer.domElement);
-controls.addEventListener('change', function () {
-  // on demand re-rendering (rendered once initially)
-  renderer.render(scene, camera);
-});
+new OrbitControls(camera, renderer.domElement);
 
 const geometry = new THREE.BoxGeometry();
 const material = new THREE.MeshNormalMaterial({ wireframe: true });
 
 const cube = new THREE.Mesh(geometry, material);
+// cube.scale.set(2, 2, 2);
 scene.add(cube);
 
 const stats = new Stats();
 document.body.appendChild(stats.dom);
 
-// const clock = new THREE.Clock();
-// let delta; // using delta to make animations monitor frame-rate independent
+const gui = new GUI();
+
+const cubeFolder = gui.addFolder('Cube');
+cubeFolder.add(cube, 'visible');
+cubeFolder.open();
+
+const positionFolder = cubeFolder.addFolder('Position');
+positionFolder.add(cube.position, 'x', -5, 5);
+positionFolder.add(cube.position, 'y', -5, 5);
+positionFolder.add(cube.position, 'z', -5, 5);
+positionFolder.open();
+
+const rotationFolder = cubeFolder.addFolder('Rotation');
+rotationFolder.add(cube.rotation, 'x', 0, Math.PI * 2);
+rotationFolder.add(cube.rotation, 'y', 0, Math.PI * 2);
+rotationFolder.add(cube.rotation, 'z', 0, Math.PI * 2);
+rotationFolder.open();
+
+const scaleFolder = cubeFolder.addFolder('Scale');
+scaleFolder.add(cube.scale, 'x', -5, 5);
+scaleFolder.add(cube.scale, 'y', -5, 5);
+scaleFolder.add(cube.scale, 'z', -5, 5);
+scaleFolder.open();
 
 function animate() {
-  requestAnimationFrame(animate); // queues the function for another call
+  requestAnimationFrame(animate);
 
-  //   delta = clock.getDelta();
-
-  //   cube.rotation.x += delta;
-  //   cube.rotation.y += delta;
-
-  //   renderer.render(scene, camera); // changes made being re-rendered
+  renderer.render(scene, camera);
 
   stats.update();
 }
 
 animate();
-
-renderer.render(scene, camera);
