@@ -2,7 +2,7 @@ body {
   overflow: hidden;
   margin: 0px;
 }
-#debug {
+/* #debug {
   font-family: monospace;
   font-size: larger;
   position: absolute;
@@ -14,4 +14,17 @@ body {
   height: 310px;
   color: white;
   pointer-events: none;
+} */
+
+.label {
+  position: absolute;
+  color: #ffffff;
+  font-family: monospace;
+  pointer-events: none;
+  text-align: center;
+  width: 75px;
+  height: 25px;
+  font-size: 1vw;
+  filter: drop-shadow(2px 2px 1px #000000);
+  display: none;
 }
