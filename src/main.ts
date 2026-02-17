@@ -1619,44 +1619,287 @@
 
 /* ENVIRONMENT MAPS */
 
+// import './style.css';
+// import * as THREE from 'three';
+// import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+// import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+// import { HDRLoader } from 'three/addons/loaders/HDRLoader.js'; // Since Threejs r179. `RGBELoader` has been renamed to `HDRLoader`.
+// import Stats from 'three/addons/libs/stats.module.js';
+// import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
+
+// const scene = new THREE.Scene();
+
+// // const environmentTexture = new THREE.CubeTextureLoader()
+// //   .setPath('https://sbcode.net/img/')
+// //   .load(['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png']);
+// // scene.environment = environmentTexture;
+// // scene.background = environmentTexture;
+
+// // const hdr = 'https://sbcode.net/img/rustig_koppie_puresky_1k.hdr';
+// // const hdr = 'https://sbcode.net/img/venice_sunset_1k.hdr';
+// const hdr = 'https://sbcode.net/img/spruit_sunrise_1k.hdr';
+
+// let environmentTexture: THREE.DataTexture;
+
+// new HDRLoader().load(hdr, (texture) => {
+//   environmentTexture = texture;
+//   environmentTexture.mapping = THREE.EquirectangularReflectionMapping;
+//   scene.environment = environmentTexture;
+//   scene.background = environmentTexture;
+//   scene.environmentIntensity = 1; // added in Three r163
+// });
+
+// const directionallight = new THREE.DirectionalLight(0xebfeff, Math.PI);
+// directionallight.position.set(1, 0.1, 1);
+// directionallight.visible = false;
+// scene.add(directionallight);
+
+// const ambientLight = new THREE.AmbientLight(0xebfeff, Math.PI / 16);
+// ambientLight.visible = false;
+// scene.add(ambientLight);
+
+// const camera = new THREE.PerspectiveCamera(
+//   75,
+//   window.innerWidth / window.innerHeight,
+//   0.1,
+//   100,
+// );
+// camera.position.set(-2, 0.5, 2);
+
+// const renderer = new THREE.WebGLRenderer({ antialias: true });
+// renderer.toneMapping = THREE.ACESFilmicToneMapping; // if using hdr mapping, likely to have this setting in projects
+// renderer.setSize(window.innerWidth, window.innerHeight);
+// document.body.appendChild(renderer.domElement);
+
+// window.addEventListener('resize', () => {
+//   camera.aspect = window.innerWidth / window.innerHeight;
+//   camera.updateProjectionMatrix();
+//   renderer.setSize(window.innerWidth, window.innerHeight);
+// });
+
+// const controls = new OrbitControls(camera, renderer.domElement);
+// controls.enableDamping = true;
+
+// const texture = new THREE.TextureLoader().load(
+//   'https://sbcode.net/img/grid.png',
+// );
+// texture.colorSpace = THREE.SRGBColorSpace;
+
+// const material = new THREE.MeshPhysicalMaterial();
+// material.side = THREE.DoubleSide;
+// material.envMapIntensity = 0.7;
+// material.roughness = 0.17;
+// material.metalness = 0.07;
+// material.clearcoat = 0.43;
+// material.iridescence = 1;
+// material.transmission = 1;
+// material.thickness = 5.12;
+// material.ior = 1.78;
+
+// const plane = new THREE.Mesh(new THREE.PlaneGeometry(10, 10), material);
+// plane.rotation.x = -Math.PI / 2;
+// plane.position.y = -1;
+// plane.visible = false;
+// scene.add(plane);
+
+// new GLTFLoader().load(
+//   'https://sbcode.net/models/suzanne_no_material.glb',
+//   (gltf) => {
+//     gltf.scene.traverse((child) => {
+//       (child as THREE.Mesh).material = material;
+//     });
+//     scene.add(gltf.scene);
+//   },
+// );
+
+// const data = {
+//   environment: true,
+//   background: true,
+//   mapEnabled: false,
+//   planeVisible: false,
+// };
+
+// const gui = new GUI();
+
+// gui.add(data, 'environment').onChange(() => {
+//   if (data.environment) {
+//     scene.environment = environmentTexture;
+//     directionallight.visible = false;
+//     ambientLight.visible = false;
+//   } else {
+//     scene.environment = null;
+//     directionallight.visible = true;
+//     ambientLight.visible = true;
+//   }
+// });
+
+// gui.add(scene, 'environmentIntensity', 0, 2, 0.01); // new in Three r163. Can be used instead of `renderer.toneMapping` with `renderer.toneMappingExposure`
+
+// gui.add(renderer, 'toneMappingExposure', 0, 2, 0.01);
+
+// gui.add(data, 'background').onChange(() => {
+//   if (data.background) {
+//     scene.background = environmentTexture;
+//   } else {
+//     scene.background = null;
+//   }
+// });
+
+// gui.add(scene, 'backgroundBlurriness', 0, 1, 0.01);
+
+// gui.add(data, 'mapEnabled').onChange(() => {
+//   if (data.mapEnabled) {
+//     material.map = texture;
+//   } else {
+//     material.map = null;
+//   }
+//   material.needsUpdate = true;
+// });
+
+// gui.add(data, 'planeVisible').onChange((v) => {
+//   plane.visible = v;
+// });
+
+// const materialFolder = gui.addFolder('meshPhysicalMaterial');
+// materialFolder.add(material, 'envMapIntensity', 0, 1.0, 0.01).onChange(() => {
+//   // Since r163, `envMap` is no longer copied from `scene.environment`. You will need to manually copy it, if you want to modify `envMapIntensity`
+//   if (!material.envMap) {
+//     material.envMap = scene.environment;
+//   }
+// }); // from meshStandardMaterial
+// materialFolder.add(material, 'roughness', 0, 1.0, 0.01); // from meshStandardMaterial
+// materialFolder.add(material, 'metalness', 0, 1.0, 0.01); // from meshStandardMaterial
+// materialFolder.add(material, 'clearcoat', 0, 1.0, 0.01);
+// materialFolder.add(material, 'iridescence', 0, 1.0, 0.01);
+// materialFolder.add(material, 'transmission', 0, 1.0, 0.01);
+// materialFolder.add(material, 'thickness', 0, 10.0, 0.01);
+// materialFolder.add(material, 'ior', 1.0, 2.333, 0.01);
+// materialFolder.close();
+
+// const stats = new Stats();
+// document.body.appendChild(stats.dom);
+
+// function animate() {
+//   requestAnimationFrame(animate);
+
+//   controls.update();
+
+//   renderer.render(scene, camera);
+
+//   stats.update();
+// }
+
+// animate();
+
+/* LOADING ASSETS */
+
+// import './style.css';
+// import * as THREE from 'three';
+// import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+// import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+// import { HDRLoader } from 'three/addons/loaders/HDRLoader.js';
+// import Stats from 'three/addons/libs/stats.module.js';
+// // import hdr from './img/venice_sunset_1k.hdr'
+// // import image from './img/grid.png'
+// // import model from './models/suzanne_no_material.glb'
+
+// const scene = new THREE.Scene();
+
+// // we can load assets in three ways
+// // 1. assets hosted on another server
+// // const hdr = 'https://sbcode.net/img/venice_sunset_1k.hdr';
+// // const image = 'https://sbcode.net/img/grid.png';
+// // const model = 'https://sbcode.net/models/suzanne_no_material.glb';
+
+// // 2. assets on any platform through cdn
+// // const hdr =
+// //   'https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/textures/equirectangular/venice_sunset_1k.hdr';
+// // const image =
+// //   'https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/textures/uv_grid_opengl.jpg';
+// // const model =
+// //   'https://cdn.jsdelivr.net/gh/mrdoob/three.js@dev/examples/models/gltf/Xbot.glb';
+
+// // 3. locally hosted assets
+// const hdr = 'img/venice_sunset_1k.hdr';
+// const image = 'img/grid.png';
+// const model = 'models/suzanne_no_material.glb';
+
+// new HDRLoader().load(hdr, (texture) => {
+//   texture.mapping = THREE.EquirectangularReflectionMapping;
+//   scene.environment = texture;
+//   scene.background = texture;
+// });
+
+// const camera = new THREE.PerspectiveCamera(
+//   75,
+//   window.innerWidth / window.innerHeight,
+//   0.1,
+//   100,
+// );
+// camera.position.set(-2, 0.5, 2);
+
+// const renderer = new THREE.WebGLRenderer({ antialias: true });
+// renderer.toneMapping = THREE.ACESFilmicToneMapping;
+// renderer.setSize(window.innerWidth, window.innerHeight);
+// document.body.appendChild(renderer.domElement);
+
+// window.addEventListener('resize', () => {
+//   camera.aspect = window.innerWidth / window.innerHeight;
+//   camera.updateProjectionMatrix();
+//   renderer.setSize(window.innerWidth, window.innerHeight);
+// });
+
+// const controls = new OrbitControls(camera, renderer.domElement);
+// controls.enableDamping = true;
+
+// const material = new THREE.MeshStandardMaterial();
+// material.map = new THREE.TextureLoader().load(image);
+// material.map.colorSpace = THREE.SRGBColorSpace;
+
+// const plane = new THREE.Mesh(new THREE.PlaneGeometry(10, 10), material);
+// plane.rotation.x = -Math.PI / 2;
+// plane.position.y = -1;
+// scene.add(plane);
+
+// new GLTFLoader().load(model, (gltf) => {
+//   gltf.scene.traverse((child) => {
+//     (child as THREE.Mesh).material = material;
+//   });
+//   scene.add(gltf.scene);
+// });
+
+// const stats = new Stats();
+// document.body.appendChild(stats.dom);
+
+// function animate() {
+//   requestAnimationFrame(animate);
+
+//   controls.update();
+
+//   renderer.render(scene, camera);
+
+//   stats.update();
+// }
+
+// animate();
+
+/* LOADING MULTIPLE ASSETS */
+
 import './style.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
-import { HDRLoader } from 'three/addons/loaders/HDRLoader.js'; // Since Threejs r179. `RGBELoader` has been renamed to `HDRLoader`.
+import { HDRLoader } from 'three/addons/loaders/HDRLoader.js';
 import Stats from 'three/addons/libs/stats.module.js';
-import { GUI } from 'three/addons/libs/lil-gui.module.min.js';
 
 const scene = new THREE.Scene();
 
-// const environmentTexture = new THREE.CubeTextureLoader()
-//   .setPath('https://sbcode.net/img/')
-//   .load(['px.png', 'nx.png', 'py.png', 'ny.png', 'pz.png', 'nz.png']);
-// scene.environment = environmentTexture;
-// scene.background = environmentTexture;
-
-// const hdr = 'https://sbcode.net/img/rustig_koppie_puresky_1k.hdr';
-// const hdr = 'https://sbcode.net/img/venice_sunset_1k.hdr';
-const hdr = 'https://sbcode.net/img/spruit_sunrise_1k.hdr';
-
-let environmentTexture: THREE.DataTexture;
-
-new HDRLoader().load(hdr, (texture) => {
-  environmentTexture = texture;
-  environmentTexture.mapping = THREE.EquirectangularReflectionMapping;
-  scene.environment = environmentTexture;
-  scene.background = environmentTexture;
-  scene.environmentIntensity = 1; // added in Three r163
+await new HDRLoader().loadAsync('img/venice_sunset_1k.hdr').then((texture) => {
+  texture.mapping = THREE.EquirectangularReflectionMapping;
+  scene.environment = texture;
+  scene.background = texture;
+  scene.backgroundBlurriness = 1.0;
 });
-
-const directionallight = new THREE.DirectionalLight(0xebfeff, Math.PI);
-directionallight.position.set(1, 0.1, 1);
-directionallight.visible = false;
-scene.add(directionallight);
-
-const ambientLight = new THREE.AmbientLight(0xebfeff, Math.PI / 16);
-ambientLight.visible = false;
-scene.add(ambientLight);
 
 const camera = new THREE.PerspectiveCamera(
   75,
@@ -1664,10 +1907,10 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   100,
 );
-camera.position.set(-2, 0.5, 2);
+camera.position.set(2, 1, -2);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
-renderer.toneMapping = THREE.ACESFilmicToneMapping; // if using hdr mapping, likely to have this setting in projects
+renderer.toneMapping = THREE.ACESFilmicToneMapping;
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
@@ -1678,103 +1921,111 @@ window.addEventListener('resize', () => {
 });
 
 const controls = new OrbitControls(camera, renderer.domElement);
+controls.target.y = 0.75;
 controls.enableDamping = true;
 
-const texture = new THREE.TextureLoader().load(
-  'https://sbcode.net/img/grid.png',
-);
-texture.colorSpace = THREE.SRGBColorSpace;
+// different ways to load dependent models:
 
-const material = new THREE.MeshPhysicalMaterial();
-material.side = THREE.DoubleSide;
-material.envMapIntensity = 0.7;
-material.roughness = 0.17;
-material.metalness = 0.07;
-material.clearcoat = 0.43;
-material.iridescence = 1;
-material.transmission = 1;
-material.thickness = 5.12;
-material.ior = 1.78;
+// const loader = new GLTFLoader();
+// let suvBody: THREE.Object3D;
+// loader.load('models/suv_body.glb', (gltf) => {
+//   suvBody = gltf.scene;
 
-const plane = new THREE.Mesh(new THREE.PlaneGeometry(10, 10), material);
-plane.rotation.x = -Math.PI / 2;
-plane.position.y = -1;
-plane.visible = false;
-scene.add(plane);
+//   // this way dependent models are loaded safely(no errors) only after the parent model has loaded
+//   loader.load('models/suv_wheel.glb', (gltf) => {
+//     gltf.scene.position.set(-0.65, 0.2, -0.77);
+//     suvBody.add(gltf.scene); // to make this model a child of suvBody model
+//   });
+//   loader.load('models/suv_wheel.glb', (gltf) => {
+//     gltf.scene.position.set(0.65, 0.2, -0.77);
+//     gltf.scene.rotateY(Math.PI);
+//     suvBody.add(gltf.scene);
+//   });
+//   loader.load('models/suv_wheel.glb', (gltf) => {
+//     gltf.scene.position.set(-0.65, 0.2, 0.57);
+//     suvBody.add(gltf.scene);
+//   });
+//   loader.load('models/suv_wheel.glb', (gltf) => {
+//     gltf.scene.position.set(0.65, 0.2, 0.57);
+//     gltf.scene.rotateY(Math.PI);
+//     suvBody.add(gltf.scene);
+//   });
 
-new GLTFLoader().load(
-  'https://sbcode.net/models/suzanne_no_material.glb',
-  (gltf) => {
-    gltf.scene.traverse((child) => {
-      (child as THREE.Mesh).material = material;
-    });
-    scene.add(gltf.scene);
-  },
-);
+//   scene.add(suvBody);
+// });
 
-const data = {
-  environment: true,
-  background: true,
-  mapEnabled: false,
-  planeVisible: false,
-};
+// const loader = new GLTFLoader();
+// loader.load('models/suv_body.glb', (gltf) => {
+//   const suvBody = gltf.scene;
+//   // instead of calling loader.load multiple times for the same model we can use the .clone() method of gltf.scene
+//   loader.load('models/suv_wheel.glb', function (gltf) {
+//     const wheels = [
+//       gltf.scene,
+//       gltf.scene.clone(), // creates a new instance of the same model
+//       gltf.scene.clone(),
+//       gltf.scene.clone(),
+//     ];
+//     wheels[0].position.set(-0.65, 0.2, -0.77);
+//     wheels[1].position.set(0.65, 0.2, -0.77);
+//     wheels[1].rotateY(Math.PI);
+//     wheels[2].position.set(-0.65, 0.2, 0.57);
+//     wheels[3].position.set(0.65, 0.2, 0.57);
+//     wheels[3].rotateY(Math.PI);
+//     suvBody.add(...wheels);
+//   });
+//   scene.add(suvBody);
+// });
 
-const gui = new GUI();
+// const loader = new GLTFLoader();
+// let suvBody: THREE.Object3D;
+// // using async/await to first wait and complete the loading of main model and then loading the child models
+// await loader.loadAsync('models/suv_body.glb').then((gltf) => {
+//   suvBody = gltf.scene;
+// });
+// loader.load('models/suv_wheel.glb', function (gltf) {
+//   const wheels = [
+//     gltf.scene,
+//     gltf.scene.clone(),
+//     gltf.scene.clone(),
+//     gltf.scene.clone(),
+//   ];
+//   wheels[0].position.set(-0.65, 0.2, -0.77);
+//   wheels[1].position.set(0.65, 0.2, -0.77);
+//   wheels[1].rotateY(Math.PI);
+//   wheels[2].position.set(-0.65, 0.2, 0.57);
+//   wheels[3].position.set(0.65, 0.2, 0.57);
+//   wheels[3].rotateY(Math.PI);
+//   suvBody.add(...wheels);
+//   scene.add(suvBody);
+// });
 
-gui.add(data, 'environment').onChange(() => {
-  if (data.environment) {
-    scene.environment = environmentTexture;
-    directionallight.visible = false;
-    ambientLight.visible = false;
-  } else {
-    scene.environment = null;
-    directionallight.visible = true;
-    ambientLight.visible = true;
-  }
-});
+async function loadCar() {
+  const loader = new GLTFLoader();
+  // code will not run next lines until and unless everything inside Promise.all is finished
+  const [...model] = await Promise.all([
+    loader.loadAsync('models/suv_body.glb'),
+    loader.loadAsync('models/suv_wheel.glb'),
+  ]);
 
-gui.add(scene, 'environmentIntensity', 0, 2, 0.01); // new in Three r163. Can be used instead of `renderer.toneMapping` with `renderer.toneMappingExposure`
+  const suvBody = model[0].scene;
+  const wheels = [
+    model[1].scene,
+    model[1].scene.clone(),
+    model[1].scene.clone(),
+    model[1].scene.clone(),
+  ];
 
-gui.add(renderer, 'toneMappingExposure', 0, 2, 0.01);
+  wheels[0].position.set(-0.65, 0.2, -0.77);
+  wheels[1].position.set(0.65, 0.2, -0.77);
+  wheels[1].rotateY(Math.PI);
+  wheels[2].position.set(-0.65, 0.2, 0.57);
+  wheels[3].position.set(0.65, 0.2, 0.57);
+  wheels[3].rotateY(Math.PI);
+  suvBody.add(...wheels);
 
-gui.add(data, 'background').onChange(() => {
-  if (data.background) {
-    scene.background = environmentTexture;
-  } else {
-    scene.background = null;
-  }
-});
-
-gui.add(scene, 'backgroundBlurriness', 0, 1, 0.01);
-
-gui.add(data, 'mapEnabled').onChange(() => {
-  if (data.mapEnabled) {
-    material.map = texture;
-  } else {
-    material.map = null;
-  }
-  material.needsUpdate = true;
-});
-
-gui.add(data, 'planeVisible').onChange((v) => {
-  plane.visible = v;
-});
-
-const materialFolder = gui.addFolder('meshPhysicalMaterial');
-materialFolder.add(material, 'envMapIntensity', 0, 1.0, 0.01).onChange(() => {
-  // Since r163, `envMap` is no longer copied from `scene.environment`. You will need to manually copy it, if you want to modify `envMapIntensity`
-  if (!material.envMap) {
-    material.envMap = scene.environment;
-  }
-}); // from meshStandardMaterial
-materialFolder.add(material, 'roughness', 0, 1.0, 0.01); // from meshStandardMaterial
-materialFolder.add(material, 'metalness', 0, 1.0, 0.01); // from meshStandardMaterial
-materialFolder.add(material, 'clearcoat', 0, 1.0, 0.01);
-materialFolder.add(material, 'iridescence', 0, 1.0, 0.01);
-materialFolder.add(material, 'transmission', 0, 1.0, 0.01);
-materialFolder.add(material, 'thickness', 0, 10.0, 0.01);
-materialFolder.add(material, 'ior', 1.0, 2.333, 0.01);
-materialFolder.close();
+  scene.add(suvBody);
+}
+await loadCar();
 
 const stats = new Stats();
 document.body.appendChild(stats.dom);
