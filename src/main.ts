@@ -1885,20 +1885,189 @@
 
 /* LOADING MULTIPLE ASSETS */
 
+// import './style.css';
+// import * as THREE from 'three';
+// import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
+// import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
+// import { HDRLoader } from 'three/addons/loaders/HDRLoader.js';
+// import Stats from 'three/addons/libs/stats.module.js';
+
+// const scene = new THREE.Scene();
+
+// await new HDRLoader().loadAsync('img/venice_sunset_1k.hdr').then((texture) => {
+//   texture.mapping = THREE.EquirectangularReflectionMapping;
+//   scene.environment = texture;
+//   scene.background = texture;
+//   scene.backgroundBlurriness = 1.0;
+// });
+
+// const camera = new THREE.PerspectiveCamera(
+//   75,
+//   window.innerWidth / window.innerHeight,
+//   0.1,
+//   100,
+// );
+// camera.position.set(2, 1, -2);
+
+// const renderer = new THREE.WebGLRenderer({ antialias: true });
+// renderer.toneMapping = THREE.ACESFilmicToneMapping;
+// renderer.setSize(window.innerWidth, window.innerHeight);
+// document.body.appendChild(renderer.domElement);
+
+// window.addEventListener('resize', () => {
+//   camera.aspect = window.innerWidth / window.innerHeight;
+//   camera.updateProjectionMatrix();
+//   renderer.setSize(window.innerWidth, window.innerHeight);
+// });
+
+// const controls = new OrbitControls(camera, renderer.domElement);
+// controls.target.y = 0.75;
+// controls.enableDamping = true;
+
+// // different ways to load dependent models:
+
+// // const loader = new GLTFLoader();
+// // let suvBody: THREE.Object3D;
+// // loader.load('models/suv_body.glb', (gltf) => {
+// //   suvBody = gltf.scene;
+
+// //   // this way dependent models are loaded safely(no errors) only after the parent model has loaded
+// //   loader.load('models/suv_wheel.glb', (gltf) => {
+// //     gltf.scene.position.set(-0.65, 0.2, -0.77);
+// //     suvBody.add(gltf.scene); // to make this model a child of suvBody model
+// //   });
+// //   loader.load('models/suv_wheel.glb', (gltf) => {
+// //     gltf.scene.position.set(0.65, 0.2, -0.77);
+// //     gltf.scene.rotateY(Math.PI);
+// //     suvBody.add(gltf.scene);
+// //   });
+// //   loader.load('models/suv_wheel.glb', (gltf) => {
+// //     gltf.scene.position.set(-0.65, 0.2, 0.57);
+// //     suvBody.add(gltf.scene);
+// //   });
+// //   loader.load('models/suv_wheel.glb', (gltf) => {
+// //     gltf.scene.position.set(0.65, 0.2, 0.57);
+// //     gltf.scene.rotateY(Math.PI);
+// //     suvBody.add(gltf.scene);
+// //   });
+
+// //   scene.add(suvBody);
+// // });
+
+// // const loader = new GLTFLoader();
+// // loader.load('models/suv_body.glb', (gltf) => {
+// //   const suvBody = gltf.scene;
+// //   // instead of calling loader.load multiple times for the same model we can use the .clone() method of gltf.scene
+// //   loader.load('models/suv_wheel.glb', function (gltf) {
+// //     const wheels = [
+// //       gltf.scene,
+// //       gltf.scene.clone(), // creates a new instance of the same model
+// //       gltf.scene.clone(),
+// //       gltf.scene.clone(),
+// //     ];
+// //     wheels[0].position.set(-0.65, 0.2, -0.77);
+// //     wheels[1].position.set(0.65, 0.2, -0.77);
+// //     wheels[1].rotateY(Math.PI);
+// //     wheels[2].position.set(-0.65, 0.2, 0.57);
+// //     wheels[3].position.set(0.65, 0.2, 0.57);
+// //     wheels[3].rotateY(Math.PI);
+// //     suvBody.add(...wheels);
+// //   });
+// //   scene.add(suvBody);
+// // });
+
+// // const loader = new GLTFLoader();
+// // let suvBody: THREE.Object3D;
+// // // using async/await to first wait and complete the loading of main model and then loading the child models
+// // await loader.loadAsync('models/suv_body.glb').then((gltf) => {
+// //   suvBody = gltf.scene;
+// // });
+// // loader.load('models/suv_wheel.glb', function (gltf) {
+// //   const wheels = [
+// //     gltf.scene,
+// //     gltf.scene.clone(),
+// //     gltf.scene.clone(),
+// //     gltf.scene.clone(),
+// //   ];
+// //   wheels[0].position.set(-0.65, 0.2, -0.77);
+// //   wheels[1].position.set(0.65, 0.2, -0.77);
+// //   wheels[1].rotateY(Math.PI);
+// //   wheels[2].position.set(-0.65, 0.2, 0.57);
+// //   wheels[3].position.set(0.65, 0.2, 0.57);
+// //   wheels[3].rotateY(Math.PI);
+// //   suvBody.add(...wheels);
+// //   scene.add(suvBody);
+// // });
+
+// async function loadCar() {
+//   const loader = new GLTFLoader();
+//   // code will not run next lines until and unless everything inside Promise.all is finished
+//   const [...model] = await Promise.all([
+//     loader.loadAsync('models/suv_body.glb'),
+//     loader.loadAsync('models/suv_wheel.glb'),
+//   ]);
+
+//   const suvBody = model[0].scene;
+//   const wheels = [
+//     model[1].scene,
+//     model[1].scene.clone(),
+//     model[1].scene.clone(),
+//     model[1].scene.clone(),
+//   ];
+
+//   wheels[0].position.set(-0.65, 0.2, -0.77);
+//   wheels[1].position.set(0.65, 0.2, -0.77);
+//   wheels[1].rotateY(Math.PI);
+//   wheels[2].position.set(-0.65, 0.2, 0.57);
+//   wheels[3].position.set(0.65, 0.2, 0.57);
+//   wheels[3].rotateY(Math.PI);
+//   suvBody.add(...wheels);
+
+//   scene.add(suvBody);
+// }
+// await loadCar();
+
+// const stats = new Stats();
+// document.body.appendChild(stats.dom);
+
+// function animate() {
+//   requestAnimationFrame(animate);
+
+//   controls.update();
+
+//   renderer.render(scene, camera);
+
+//   stats.update();
+// }
+
+// animate();
+
+/* GLTF LOADER */
+
 import './style.css';
 import * as THREE from 'three';
 import { OrbitControls } from 'three/addons/controls/OrbitControls.js';
 import { GLTFLoader } from 'three/addons/loaders/GLTFLoader.js';
 import { HDRLoader } from 'three/addons/loaders/HDRLoader.js';
 import Stats from 'three/addons/libs/stats.module.js';
+import { Lensflare, LensflareElement } from 'three/addons/objects/Lensflare.js';
 
 const scene = new THREE.Scene();
 
-await new HDRLoader().loadAsync('img/venice_sunset_1k.hdr').then((texture) => {
+// const light = new THREE.SpotLight(undefined, Math.PI * 1000);
+// light.position.set(5, 5, 5);
+// light.angle = Math.PI / 16;
+// light.castShadow = true;
+// scene.add(light);
+
+// const helper = new THREE.SpotLightHelper(light);
+// scene.add(helper);
+
+new HDRLoader().load('img/venice_sunset_1k.hdr', (texture) => {
   texture.mapping = THREE.EquirectangularReflectionMapping;
   scene.environment = texture;
   scene.background = texture;
-  scene.backgroundBlurriness = 1.0;
+  scene.backgroundBlurriness = 0.15;
 });
 
 const camera = new THREE.PerspectiveCamera(
@@ -1907,10 +2076,12 @@ const camera = new THREE.PerspectiveCamera(
   0.1,
   100,
 );
-camera.position.set(2, 1, -2);
+camera.position.set(1.5, 0.75, 2);
 
 const renderer = new THREE.WebGLRenderer({ antialias: true });
 renderer.toneMapping = THREE.ACESFilmicToneMapping;
+renderer.toneMappingExposure = 0.8;
+renderer.shadowMap.enabled = true;
 renderer.setSize(window.innerWidth, window.innerHeight);
 document.body.appendChild(renderer.domElement);
 
@@ -1921,111 +2092,48 @@ window.addEventListener('resize', () => {
 });
 
 const controls = new OrbitControls(camera, renderer.domElement);
-controls.target.y = 0.75;
 controls.enableDamping = true;
 
-// different ways to load dependent models:
+// const textureLoader = new THREE.TextureLoader();
+// const textureFlare0 = textureLoader.load(
+//   'https://cdn.jsdelivr.net/gh/Sean-Bradley/First-Car-Shooter@main/dist/client/img/lensflare0.png',
+// );
 
-// const loader = new GLTFLoader();
-// let suvBody: THREE.Object3D;
-// loader.load('models/suv_body.glb', (gltf) => {
-//   suvBody = gltf.scene;
+// const lensflare = new Lensflare();
+// lensflare.addElement(new LensflareElement(textureFlare0, 1000, 0));
+// light.add(lensflare);
 
-//   // this way dependent models are loaded safely(no errors) only after the parent model has loaded
-//   loader.load('models/suv_wheel.glb', (gltf) => {
-//     gltf.scene.position.set(-0.65, 0.2, -0.77);
-//     suvBody.add(gltf.scene); // to make this model a child of suvBody model
-//   });
-//   loader.load('models/suv_wheel.glb', (gltf) => {
-//     gltf.scene.position.set(0.65, 0.2, -0.77);
-//     gltf.scene.rotateY(Math.PI);
-//     suvBody.add(gltf.scene);
-//   });
-//   loader.load('models/suv_wheel.glb', (gltf) => {
-//     gltf.scene.position.set(-0.65, 0.2, 0.57);
-//     suvBody.add(gltf.scene);
-//   });
-//   loader.load('models/suv_wheel.glb', (gltf) => {
-//     gltf.scene.position.set(0.65, 0.2, 0.57);
-//     gltf.scene.rotateY(Math.PI);
-//     suvBody.add(gltf.scene);
-//   });
+new GLTFLoader().load('models/suzanne_scene.glb', (gltf) => {
+  console.log(gltf);
 
-//   scene.add(suvBody);
-// });
+  const suzanne = gltf.scene.getObjectByName('Suzanne') as THREE.Mesh;
+  suzanne.castShadow = true;
 
-// const loader = new GLTFLoader();
-// loader.load('models/suv_body.glb', (gltf) => {
-//   const suvBody = gltf.scene;
-//   // instead of calling loader.load multiple times for the same model we can use the .clone() method of gltf.scene
-//   loader.load('models/suv_wheel.glb', function (gltf) {
-//     const wheels = [
-//       gltf.scene,
-//       gltf.scene.clone(), // creates a new instance of the same model
-//       gltf.scene.clone(),
-//       gltf.scene.clone(),
-//     ];
-//     wheels[0].position.set(-0.65, 0.2, -0.77);
-//     wheels[1].position.set(0.65, 0.2, -0.77);
-//     wheels[1].rotateY(Math.PI);
-//     wheels[2].position.set(-0.65, 0.2, 0.57);
-//     wheels[3].position.set(0.65, 0.2, 0.57);
-//     wheels[3].rotateY(Math.PI);
-//     suvBody.add(...wheels);
-//   });
-//   scene.add(suvBody);
-// });
+  // (
+  //   (suzanne.material as THREE.MeshStandardMaterial).map as THREE.Texture
+  // ).colorSpace = THREE.LinearSRGBColorSpace;
 
-// const loader = new GLTFLoader();
-// let suvBody: THREE.Object3D;
-// // using async/await to first wait and complete the loading of main model and then loading the child models
-// await loader.loadAsync('models/suv_body.glb').then((gltf) => {
-//   suvBody = gltf.scene;
-// });
-// loader.load('models/suv_wheel.glb', function (gltf) {
-//   const wheels = [
-//     gltf.scene,
-//     gltf.scene.clone(),
-//     gltf.scene.clone(),
-//     gltf.scene.clone(),
-//   ];
-//   wheels[0].position.set(-0.65, 0.2, -0.77);
-//   wheels[1].position.set(0.65, 0.2, -0.77);
-//   wheels[1].rotateY(Math.PI);
-//   wheels[2].position.set(-0.65, 0.2, 0.57);
-//   wheels[3].position.set(0.65, 0.2, 0.57);
-//   wheels[3].rotateY(Math.PI);
-//   suvBody.add(...wheels);
-//   scene.add(suvBody);
-// });
+  // @ts-ignore
+  suzanne.material.map.colorSpace = THREE.LinearSRGBColorSpace;
 
-async function loadCar() {
-  const loader = new GLTFLoader();
-  // code will not run next lines until and unless everything inside Promise.all is finished
-  const [...model] = await Promise.all([
-    loader.loadAsync('models/suv_body.glb'),
-    loader.loadAsync('models/suv_wheel.glb'),
-  ]);
+  const plane = gltf.scene.getObjectByName('Plane') as THREE.Mesh;
+  plane.receiveShadow = true;
 
-  const suvBody = model[0].scene;
-  const wheels = [
-    model[1].scene,
-    model[1].scene.clone(),
-    model[1].scene.clone(),
-    model[1].scene.clone(),
-  ];
+  const spotLight = gltf.scene.getObjectByName('Spot') as THREE.SpotLight;
+  spotLight.intensity /= 500;
+  spotLight.castShadow = true;
 
-  wheels[0].position.set(-0.65, 0.2, -0.77);
-  wheels[1].position.set(0.65, 0.2, -0.77);
-  wheels[1].rotateY(Math.PI);
-  wheels[2].position.set(-0.65, 0.2, 0.57);
-  wheels[3].position.set(0.65, 0.2, 0.57);
-  wheels[3].rotateY(Math.PI);
-  suvBody.add(...wheels);
+  const textureLoader = new THREE.TextureLoader();
+  const textureFlare0 = textureLoader.load(
+    'https://cdn.jsdelivr.net/gh/Sean-Bradley/First-Car-Shooter@main/dist/client/img/lensflare0.png',
+  );
 
-  scene.add(suvBody);
-}
-await loadCar();
+  const lensflare = new Lensflare();
+  lensflare.addElement(new LensflareElement(textureFlare0, 1000, 0));
+  spotLight.add(lensflare);
+
+  scene.add(gltf.scene);
+});
 
 const stats = new Stats();
 document.body.appendChild(stats.dom);
