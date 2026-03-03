@@ -28,7 +28,7 @@ body {
   filter: drop-shadow(2px 2px 1px #000000);
 } */
 
-#menuPanel {
+/* #menuPanel {
   position: absolute;
   top: 0px;
   left: 0px;
@@ -45,4 +45,4 @@ body {
   left: 50%;
   font-size: 28px;
   font-family: monospace;
-}
+} */
